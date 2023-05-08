@@ -84,5 +84,27 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
         return returnList;
     }
+    public List<StudentMod> searchStudent(String name) {
+        List<StudentMod> returnList = new ArrayList<>();
+        // get data from database
+        String queryString = "Select * from " + STUDENT_TABLE + " WHERE " +
+                COLUMN_STUDENT_NAME + " = '" + name + "'";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+        if (cursor.moveToFirst()) {
+            // loop through cursor results
+            do {
+                int SID = cursor.getInt(0); // student ID
+                String SName = cursor.getString(1);
+                int SAge = cursor.getInt(2);
+                StudentMod newStudent = new StudentMod(SID, SName, SAge);
+                returnList.add(newStudent);
+            } while (cursor.moveToNext());
+        }
+        //close
+        cursor.close();
+        db.close();
+        return returnList;
+    }
 }
 
